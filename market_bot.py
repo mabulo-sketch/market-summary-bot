@@ -18,7 +18,10 @@ CRYPTO_SYMBOLS = ["BTCUSDT", "ETHUSDT", "SOLUSDT"]
 
 def get_crypto_data(symbol: str) -> dict:
     """Precio actual, variación 24h y volumen 24h desde Binance."""
-    url = "https://api.binance.com/api/v3/ticker/24hr"
+    # Se usa data-api.binance.vision en vez de api.binance.com porque este
+    # endpoint es solo de datos públicos y no aplica el geo-bloqueo (error 451)
+    # que sí aplica el dominio principal a IPs de EE.UU. (como las de GitHub Actions).
+    url = "https://data-api.binance.vision/api/v3/ticker/24hr"
     response = requests.get(url, params={"symbol": symbol}, timeout=15)
     response.raise_for_status()
     data = response.json()
